@@ -15,8 +15,11 @@ class Indenter {
         ),
         // $inline_elements = array('b', 'big', 'i', 'small', 'tt', 'abbr', 'acronym', 'cite', 'code', 'dfn', 'em', 'kbd', 'strong', 'samp', 'var', 'a', 'bdo', 'br', 'img', 'span', 'sub', 'sup'),
         $temporary_replacements_script = array(),
-        $temporary_replacements_inline = array();
-
+        $temporary_replacements_inline = array(),
+        $temporary_replacements_no_inline_exclusion = array(
+            'elements' => array()
+        );
+    
     const ELEMENT_TYPE_BLOCK = 0;
     const ELEMENT_TYPE_INLINE = 1;
 
@@ -70,11 +73,24 @@ class Indenter {
             }
         }
 
+        foreach ($this->options['exclusion_elements'] as $key => $value) {
+            if (preg_match_all('/<' . $value . '\b[^>]*>([\s\S]*?)<\/' . $value . '>/mi', $input, $matches)) {
+                $new_array = array(
+                    'element' => $value,
+                    'value' => $matches[0]
+                );
+                array_push($this->temporary_replacements_no_inline_exclusion['elements'], $new_array);
+                foreach ($matches[0] as $i => $match) {
+                    $input = str_replace($match, '<' . $value . '>' . ($i + 1) . '</' . $value . '>', $input);
+                }
+            }
+        }
+
         // Removing double whitespaces to make the source code easier to read.
         // With exception of <pre>/ CSS white-space changing the default behaviour, double whitespace is meaningless in HTML output.
         // This reason alone is sufficient not to use Dindent in production.
         $input = str_replace("\t", '', $input);
-        // $input = preg_replace('/\s{2,}/', ' ', $input);
+        $input = preg_replace('/\s{2,}/', ' ', $input);
 
         // Remove inline elements and replace them with text entities.
         if (preg_match_all('/<(' . implode('|', $this->options['inline_elements']) . ')[^>]*>(?:[^<]*)<\/\1>/', $input, $matches)) {
@@ -163,6 +179,12 @@ class Indenter {
 
         foreach ($this->temporary_replacements_script as $i => $original) {
             $output = str_replace('<script>' . ($i + 1) . '</script>', $original, $output);
+        }
+
+        foreach ($this->temporary_replacements_no_inline_exclusion['elements'] as $key => $value) {
+            foreach ($value['value'] as $i => $original) {
+                $output = str_replace('<' . $value['element'] . '>' . ($i + 1) . '</' . $value['element'] . '>', $original, $output);
+            }
         }
 
         foreach ($this->temporary_replacements_inline as $i => $original) {
