@@ -9,9 +9,11 @@ class Indenter {
     private
         $log = array(),
         $options = array(
-            'indentation_character' => '    '
+            'indentation_character' => '    ',
+            'exclusion_elements' => array(),
+            'inline_elements' => array()
         ),
-        $inline_elements = array('b', 'big', 'i', 'small', 'tt', 'abbr', 'acronym', 'cite', 'code', 'dfn', 'em', 'kbd', 'strong', 'samp', 'var', 'a', 'bdo', 'br', 'img', 'span', 'sub', 'sup'),
+        // $inline_elements = array('b', 'big', 'i', 'small', 'tt', 'abbr', 'acronym', 'cite', 'code', 'dfn', 'em', 'kbd', 'strong', 'samp', 'var', 'a', 'bdo', 'br', 'img', 'span', 'sub', 'sup'),
         $temporary_replacements_script = array(),
         $temporary_replacements_inline = array();
 
@@ -75,7 +77,7 @@ class Indenter {
         // $input = preg_replace('/\s{2,}/', ' ', $input);
 
         // Remove inline elements and replace them with text entities.
-        if (preg_match_all('/<(' . implode('|', $this->inline_elements) . ')[^>]*>(?:[^<]*)<\/\1>/', $input, $matches)) {
+        if (preg_match_all('/<(' . implode('|', $this->options['inline_elements']) . ')[^>]*>(?:[^<]*)<\/\1>/', $input, $matches)) {
             $this->temporary_replacements_inline = $matches[0];
             foreach ($matches[0] as $i => $match) {
                 $input = str_replace($match, 'ᐃ' . ($i + 1) . 'ᐃ', $input);
