@@ -74,7 +74,7 @@ class Indenter {
         }
 
         foreach ($this->options['exclusion_elements'] as $key => $value) {
-            if (preg_match_all('/<' . $value . '\b[^>]*>([\s\S]*?)<\/' . $value . '>/mi', $input, $matches)) {
+            if (preg_match_all('/<' . preg_quote($value, '/') . '\b[^>]*>([\s\S]*?)<\/' . $value . '>/mi', $input, $matches)) {
                 $new_array = array(
                     'element' => $value,
                     'value' => $matches[0]
@@ -93,7 +93,12 @@ class Indenter {
         $input = preg_replace('/\s{2,}/', ' ', $input);
 
         // Remove inline elements and replace them with text entities.
-        if (preg_match_all('/<(' . implode('|', $this->options['inline_elements']) . ')[^>]*>(?:[^<]*)<\/\1>/', $input, $matches)) {
+        $inline_elements_quote = array();
+        foreach ($this->options['inline_elements'] as $inline_element) {
+            $inline_elements_quote[] = $inline_element;
+        }
+
+        if (preg_match_all('/<(' . implode('|', $inline_elements_quote) . ')[^>]*>(?:[^<]*)<\/\1>/', $input, $matches)) {
             $this->temporary_replacements_inline = $matches[0];
             foreach ($matches[0] as $i => $match) {
                 $input = str_replace($match, 'ᐃ' . ($i + 1) . 'ᐃ', $input);
