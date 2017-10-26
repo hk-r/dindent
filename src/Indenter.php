@@ -95,7 +95,7 @@ class Indenter {
         // Remove inline elements and replace them with text entities.
         $inline_elements_quote = array();
         foreach ($this->options['inline_elements'] as $inline_element) {
-            $inline_elements_quote[] = $inline_element;
+            $inline_elements_quote[] = preg_quote($inline_element, '/');
         }
 
         if (preg_match_all('/<(' . implode('|', $inline_elements_quote) . ')[^>]*>(?:[^<]*)<\/\1>/', $input, $matches)) {
