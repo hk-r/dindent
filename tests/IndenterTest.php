@@ -33,7 +33,7 @@ class IndenterTest extends PHPUnit_Framework_TestCase {
 
         $expected_output = '<p>X<p></p></p>';
 
-        $this->assertSame($expected_output, str_replace("\n", '', $indented));
+        $this->assertSame($expected_output, str_replace("\r\n", '', $indented));
     }
 
     /**
@@ -52,7 +52,7 @@ class IndenterTest extends PHPUnit_Framework_TestCase {
                 '<p></p>',
                 array(
                     'rule' => 'NO',
-                    'pattern' => '/^(<([a-z]+)(?:[^>]*)>(?:[^<]*)<\\/(?:\\2)>)/',
+                    'pattern' => '/^(<([a-z0-9]+)(?:[^>]*)>(?:[^<]*)<\\/(?:\\2)>)/',
                     'subject' => '<p></p>',
                     'match' => '<p></p>',
                 )
