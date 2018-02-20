@@ -68,8 +68,8 @@ class IndenterTest extends PHPUnit_Framework_TestCase {
 
         $input = file_get_contents(__DIR__ . '/sample/input/' . $name . '.html');
         $expected_output = file_get_contents(__DIR__ . '/sample/output/' . $name . '.html');
-
-        $this->assertSame($expected_output, $indenter->indent($input));
+        
+        $this->assertEquals($expected_output, $indenter->indent($input));
     }
 
     public function indentProvider () {
