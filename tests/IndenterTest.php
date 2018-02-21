@@ -33,7 +33,7 @@ class IndenterTest extends PHPUnit_Framework_TestCase {
 
         $expected_output = '<p>X<p></p></p>';
 
-        $this->assertSame($expected_output, str_replace("\r\n", '', $indented));
+        $this->assertSame($expected_output, str_replace("\n", '', $indented));
     }
 
     /**

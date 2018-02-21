@@ -164,7 +164,7 @@ class Indenter {
                         $indentation_level = 0;
                     }
 
-                    $output .= str_repeat($this->options['indentation_character'], $indentation_level) . $matches[0] . "\r\n";
+                    $output .= str_repeat($this->options['indentation_character'], $indentation_level) . $matches[0] . "\n";
 
                     break;
                 }
@@ -195,8 +195,7 @@ class Indenter {
         foreach ($this->temporary_replacements_inline as $i => $original) {
             $output = str_replace('ᐃ' . ($i + 1) . 'ᐃ', $original, $output);
         }
-
-        $output = preg_replace("/\r\n|\r|\n/", "\r\n", $output);
+        
         return trim($output);
     }
 
