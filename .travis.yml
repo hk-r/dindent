@@ -1,3 +1,8 @@
+matrix:
+  include:
+    - os: linux
+    - os: osx
+
 language: php
 
 php:
