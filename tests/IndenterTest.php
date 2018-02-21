@@ -70,6 +70,7 @@ class IndenterTest extends PHPUnit_Framework_TestCase {
         $expected_output = file_get_contents(__DIR__ . '/sample/output/' . $name . '.html');
         
         $this->assertEquals($expected_output, $indenter->indent($input));
+        
     }
 
     public function indentProvider () {
