@@ -1,8 +1,6 @@
 matrix:
   include:
     - os: linux
-    - os: osx
-      osx_image: xcode8
 
 language: php
 
