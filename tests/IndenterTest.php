@@ -68,8 +68,8 @@ class IndenterTest extends PHPUnit_Framework_TestCase {
 
         $input = file_get_contents(__DIR__ . '/sample/input/' . $name . '.html');
         $expected_output = file_get_contents(__DIR__ . '/sample/output/' . $name . '.html');
-        
-        $this->assertEquals($expected_output, $indenter->indent($input));
+
+        $this->assertEquals(preg_replace("/\r\n|\r|\n/", "\n", $expected_output), $indenter->indent(preg_replace("/\r\n|\r|\n/", "\n", $input)));
         
     }
 
